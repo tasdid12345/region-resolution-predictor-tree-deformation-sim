@@ -23,6 +23,33 @@ python analysis.py
 ## Results
 Results are written to results.json (and a chart to figures/).
 
+## Results (latest run)
+
+On simulated 2D deformable-tree data (500 clean test labels), a standard MLP on raw start and goal pointclouds, standing in for your diffusion generator, reached 41% per-region resolution accuracy, while a tuned LightGBM on local deformation features reached 94% on the same test set.
+
+| Metric | Value |
+|---|---|
+| baseline_score | 0.4078 |
+| baseline_score_std | 0.004596 |
+| baseline_under_resolved_share | 0.3079 |
+| baseline_under_resolved_share_std | 0.0156 |
+| baseline_mean_resolution | 2.307 |
+| baseline_mean_resolution_std | 0.05351 |
+| improved_score | 0.9413 |
+| improved_score_std | 0.0002041 |
+| improved_under_resolved_share | 0.02667 |
+| improved_under_resolved_share_std | 0.0002357 |
+| improved_mean_resolution | 2.399 |
+| improved_mean_resolution_std | 0.0006236 |
+| improvement | 0.5335 |
+| test_true_mean_resolution | 2.389 |
+| train_label_noise_rate | 0.2579 |
+| majority_class_test_accuracy | 0.4903 |
+
+Run on 2026-10-12. Full output: [results.json](results.json) · [run.log](run.log)
+
+Notes: Simulated data, not the paper's; labels come from a geometric approximation-error rule, not closed-loop planning performance, so results do not test the paper's speed/performance claim. Features such as displacement curvature are close to the labelling rule, which favours the feature model. The diffusion generator is replaced by an MLP. Threshold is the 70th percentile of linear-fit error on train trees. Seeds only affect model training; the simulated data are fixed. Tuning uses noisy train labels. Under-resolved share and mean resolution are proxies only.
+
 ## Reference
 
 This project is motivated by the following paper:
