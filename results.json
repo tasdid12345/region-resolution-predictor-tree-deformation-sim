@@ -1,0 +1,36 @@
+{
+  "question": "Can a tuned gradient-boosting predictor on per-region start-to-goal deformation features beat a standard MLP on raw start and goal pointclouds at predicting per-region model resolution for a simulated deformable tree?",
+  "method": "Simulated 2D branching trees with smooth random bends; resolution label = smallest control-point count (1, 2, 4) whose piecewise-linear fit of the region displacement is under a threshold; train labels randomly flipped, test labels clean; both models tuned by 3-fold CV on train only; seeds 42-44.",
+  "dataset": {
+    "name": "Simulated deformable 2D trees (8 regions, 200 points each)",
+    "source_url": "generated in script (numpy); no download",
+    "n_rows": 2500,
+    "n_train": 2000,
+    "n_test": 500,
+    "same_as_paper": false,
+    "baseline_is_papers_method": false
+  },
+  "metric_name": "Per-region resolution accuracy on clean test labels",
+  "higher_is_better": true,
+  "baseline": "scikit-learn MLPClassifier on flattened start+goal pointclouds predicting all region resolutions (stand-in for the paper's diffusion generator), CV-tuned over 6 configs.",
+  "improved": "One LightGBM classifier shared across regions on local deformation features (displacement mean/spread, curvature, end-to-end change, branch length, stretch, region id), CV-tuned over 6 configs.",
+  "metrics": {
+    "baseline_score": 0.40775000000000006,
+    "baseline_score_std": 0.0045961940777125496,
+    "baseline_under_resolved_share": 0.30791666666666667,
+    "baseline_under_resolved_share_std": 0.015599590450464473,
+    "baseline_mean_resolution": 2.3066666666666666,
+    "baseline_mean_resolution_std": 0.05351375731736852,
+    "improved_score": 0.94125,
+    "improved_score_std": 0.00020412414523195436,
+    "improved_under_resolved_share": 0.02666666666666667,
+    "improved_under_resolved_share_std": 0.00023570226039551604,
+    "improved_mean_resolution": 2.399083333333333,
+    "improved_mean_resolution_std": 0.000623609564462334,
+    "improvement": 0.5335,
+    "test_true_mean_resolution": 2.38875,
+    "train_label_noise_rate": 0.257875,
+    "majority_class_test_accuracy": 0.49025
+  },
+  "notes": "Simulated data, not the paper's; labels come from a geometric approximation-error rule, not closed-loop planning performance, so results do not test the paper's speed/performance claim. Features such as displacement curvature are close to the labelling rule, which favours the feature model. The diffusion generator is replaced by an MLP. Threshold is the 70th percentile of linear-fit error on train trees. Seeds only affect model training; the simulated data are fixed. Tuning uses noisy train labels. Under-resolved share and mean resolution are proxies only."
+}
